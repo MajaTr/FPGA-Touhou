@@ -1,3 +1,16 @@
+TODO: Write a sensible description. 
+
+If you're not a Cambridge CompSci student after the ECAD course then there's little chance you'll be able to run it anyway.
+
+
+
+
+
+
+
+Original readme.md:
+
+
 Place your C (`.c`) and assembly (`.s` or `.S`) source files in the src directory.
 Ensure that you do not have multiple source files with the same name (e.g. `main.c` and `main.s`).
 
