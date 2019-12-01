@@ -2,7 +2,7 @@
 #include "peripherals.h"
 #include "asmfunctions.h"
 #include "entities.h"
-
+#include <stddef.h>
 
 int stick_up()
 {
@@ -119,7 +119,7 @@ int bullet_lookup[3][3] = {
 
 
 
-void *memset(void *str, int c, unsigned int n)
+void *memset(void *str, int c, size_t n)
 {
 	for(int i=0; i<n; ++i) *((unsigned char*)str+i) = (unsigned char)c;
 	return str;
@@ -192,7 +192,11 @@ void harmonic_advance(harmonic_oscillator *h) {
 
 void main_loop()
 {
+	//hex_output(1);
 	clear_screen(global_col);
+	//hex_output(2);
+	clear_help_buffer();
+	hex_output(3);
 	entity reimu;
 	reimu.x = 100; reimu.y = 100;
 	reimu.sprite = reimu_sprite;
@@ -204,6 +208,8 @@ void main_loop()
 	speed_pool s;
 	s.maxdx = 4*(1<<RES)+1; s.offdx = -2*(1<<RES);
 	s.maxdy = 1*(1<<RES)+1; s.offdy = -4*(1<<RES);
+
+	
 	s.x_incr = (1<<(RES-2))+3; s.y_incr = 3721;
 	s.x_cf = 1; s.y_cf = 37;
 	
@@ -231,6 +237,8 @@ void main_loop()
 	int n_bul = 90;
 	bullet_entity bullet[n_bul];
 
+	hex_output(4);
+
 
 	print_entity(&reimu, 1);
 	print_entity(&marisa, 1);
@@ -242,6 +250,7 @@ void main_loop()
 	while(1)
 	{
 		unsigned int t1 = get_ms();
+		clear_help_buffer();
 
 		harmonic_advance(&hx);
 		harmonic_advance(&hy);
@@ -273,8 +282,9 @@ void main_loop()
 			rdx = rdy = 0;
 		}
 
-		move_entity1(&marisa, mdx, mdy);
-		for(int i=0; i<cnt; ++i) if(!update_bullet1(bullet+i)) {
+		move_entity(&marisa, mdx, mdy);
+		move_entity(&reimu, rdx, rdy);
+		for(int i=0; i<cnt; ++i) if(!update_bullet(bullet+i)) {
 			bullet[i] = create_bullet(spawnx, spawny, rem(div(bullet_col++, 10), 3));
 			
 			bullet[i].dx = speed_get_dx(&s); bullet[i].dy = speed_get_dy(&s);
@@ -282,12 +292,6 @@ void main_loop()
 			speed_pool_advance(&s);
 			print_entity(&bullet[i].e, 1);
 		}
-		move_entity2(&marisa, mdx, mdy);
-		for(int i=0; i<cnt; ++i) {
-			update_bullet2(bullet+i);
-		}
-		move_entity1(&reimu, rdx, rdy);
-		move_entity2(&reimu, rdx, rdy);
 		
 		
 		for(int i=0; i<cnt; ++i) if(collision(reimu.x, reimu.y, &bullet[i].e, 12))

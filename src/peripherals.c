@@ -69,7 +69,7 @@ unsigned int get_ms()
 unsigned int help_buffer[(DISPLAY_WIDTH*DISPLAY_HEIGHT)>>4] = {};
 
 
-void vid_set_conditional(int x, int y, int colour, int cond, unsigned int new_help_val)
+void vid_set_pixel_conditional(int x, int y, int colour, int cond, unsigned int new_help_val)
 {
 
 	// make sure we don't go past the edge of the screen
@@ -80,14 +80,15 @@ void vid_set_conditional(int x, int y, int colour, int cond, unsigned int new_he
 
 	int i = x+y*DISPLAY_WIDTH;
 	unsigned int tmp = help_buffer[i>>4];
-	unsigned int val = tmp>>((i&15)<<1);
+	unsigned int val = (tmp>>((i&15)<<1))&3;
 	
 	if(val==1) return;
 	if(val==2) cond = 1;
-	if(!cond) return;
 
-	tmp ^= (new_help_val^val)<<((i&15)<<1);
+	tmp ^= ((new_help_val^val)<<((i&15)<<1));
 	help_buffer[i>>4] = tmp;
+
+	if(!cond) return;
 
 	// derive a pointer to the framebuffer described as 16 bit integers
 	volatile short *framebuffer = (volatile short *) (FRAMEBUFFER_BASE);
@@ -97,7 +98,10 @@ void vid_set_conditional(int x, int y, int colour, int cond, unsigned int new_he
 
 void clear_help_buffer()
 {
-	for(int i=0; i<(DISPLAY_WIDTH*DISPLAY_HEIGHT)>>4; ++i) help_buffer[i] = 0;
+	for(int i=0; i<((DISPLAY_WIDTH*DISPLAY_HEIGHT)>>4); ++i) {
+		//hex_output(i+1);
+		help_buffer[i] = 0;
+	}
 }
 
 

@@ -17,10 +17,9 @@ typedef struct entity
 void print_entity(entity *r, int transp);
 
 
-void move_entity1(entity *r, int dx, int dy);
+void move_entity(entity *r, int dx, int dy);
 
 
-void move_entity2(entity *r, int dx, int dy);
 
 int entity_off_board(entity *r, int dx, int dy);
 
@@ -37,9 +36,8 @@ typedef struct bullet_entity
 } bullet_entity;
 
 
-int update_bullet1(bullet_entity *b);
+int update_bullet(bullet_entity *b);
 
-void update_bullet2(bullet_entity *b);
 
 
 #endif

@@ -35,7 +35,7 @@ void hex_output(int value);
 
 unsigned int get_ms();
 
-void vid_set_conditional(int x, int y, int colour, int cond, unsigned int new_help_val);
+void vid_set_pixel_conditional(int x, int y, int colour, int cond, unsigned int new_help_val);
 void clear_help_buffer();
 
 #endif
