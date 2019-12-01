@@ -38,5 +38,9 @@ unsigned int get_ms();
 void vid_set_pixel_conditional(int x, int y, int colour, int cond, unsigned int new_help_val);
 void clear_help_buffer();
 
+
+void start_time_delta();
+unsigned int time_delta();
+
 #endif
 

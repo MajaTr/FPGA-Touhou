@@ -1,6 +1,6 @@
 #include "peripherals.h"
 #include "avalon_addr.h"
-
+#include <stddef.h>
 
 int avalon_read(unsigned int address)
 {
@@ -104,4 +104,14 @@ void clear_help_buffer()
 	}
 }
 
+
+unsigned int start_time;
+void start_time_delta()
+{
+	start_time = get_time();
+}
+unsigned int time_delta()
+{
+	return get_time()-start_time;
+}
 

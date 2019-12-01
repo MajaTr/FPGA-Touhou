@@ -9,7 +9,9 @@
 
 
 #define global_col PIXEL24(32, 32, 32)
-void main_loop();
+void original_loop();
+
+void youmu_loop();
 
 #endif
 

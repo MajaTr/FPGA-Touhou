@@ -2,6 +2,7 @@
 #include "peripherals.h"
 #include "asmfunctions.h"
 #include "entities.h"
+#include "data.h"
 #include <stddef.h>
 
 int stick_up()
@@ -33,110 +34,7 @@ void wait_for_tick()
 
 
 
-int reimu_sprite[24*12] = {
-0, 0, 0, 0, 3, 4, 4, 3, 0, 0, 0, 0,
-0, 0, 0, 0, 3, 4, 4, 3, 0, 0, 0, 0,
-0, 0, 0, 0, 3, 4, 4, 3, 0, 0, 0, 0,
-0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0,
-0, 1, 3, 1, 3, 3, 1, 3, 1, 1, 0, 0,
-1, 3, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1,
-1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1,
-1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
-0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
-0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0,
-0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0,
-0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0,
-3, 3, 3, 1, 3, 3, 3, 3, 1, 3, 3, 3,
-3, 3, 3, 1, 3, 3, 2, 3, 1, 3, 3, 3,
-0, 3, 3, 1, 3, 2, 2, 2, 1, 3, 3, 0,
-0, 0, 0, 2, 2, 2, 2, 2, 2, 0, 0, 0,
-0, 0, 0, 2, 2, 2, 2, 2, 2, 0, 0, 0,
-0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0,
-0, 0, 1, 1, 2, 2, 2, 2, 1, 1, 0, 0,
-0, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 0,
-0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
-0, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 0,
-0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0
-};
-int reimu_lookup[5] = {0, PIXEL_RED, PIXEL_BLACK, PIXEL24(0xdd, 0xdd, 0xdd), PIXEL24(0x88, 0x88, 0x88)};
 
-
-int marisa_sprite[32*27] = {
-0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 0, 2, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 2, 2, 1, 0, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 2, 2, 0, 0, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 2, 2, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 2, 2, 0, 2, 2, 2, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 2, 2, 0, 2, 2, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 2, 2, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 2, 2, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 1, 1, 4, 4, 4, 2, 0, 0, 0,
-0, 0, 2, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 0, 0, 2, 4, 2, 0, 0,
-0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 0, 2, 2, 4, 4, 0, 0,
-0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 2, 2, 0, 0, 4, 4, 4,
-0, 0, 0, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 2, 2, 0, 0, 0, 0, 0, 0,
-0, 2, 4, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0,
-0, 2, 4, 2, 0, 1, 2, 2, 2, 2, 6, 6, 6, 6, 1, 1, 1, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 4, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 1, 1, 1, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 4, 0, 0, 0, 0, 0, 3, 0, 0, 2, 2, 3, 1, 1, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 4, 4, 0, 0, 0, 0, 0, 3, 3, 0, 2, 2, 3, 1, 1, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-4, 4, 4, 4, 0, 0, 0, 0, 3, 3, 0, 1, 1, 3, 3, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-4, 4, 4, 4, 0, 0, 0, 0, 3, 3, 5, 5, 5, 5, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-4, 4, 4, 4, 0, 0, 0, 2, 3, 5, 5, 5, 5, 5, 5, 3, 2, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0,
-4, 4, 4, 4, 0, 0, 0, 2, 3, 5, 1, 5, 5, 1, 5, 3, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-4, 4, 4, 4, 0, 0, 2, 2, 3, 5, 1, 5, 5, 1, 5, 3, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 4, 4, 4, 0, 1, 1, 2, 3, 3, 5, 5, 5, 5, 3, 3, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 4, 4, 0, 0, 0, 1, 1, 2, 3, 3, 3, 3, 3, 3, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 4, 4, 0, 0, 0, 0, 1, 1, 2, 2, 3, 3, 3, 2, 2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 2, 2, 2, 2, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-};
-int marisa_lookup[7] = {0, PIXEL_BLACK, PIXEL_WHITE, PIXEL24(0xff, 0xff, 0), PIXEL24(0x80, 0x40, 0), PIXEL_WHITE, PIXEL_RED};
-
-
-#define BUL_R 3
-
-int bullet_sprite[7*7] = {
-0, 1, 0, 0, 0, 1, 0,
-0, 1, 1, 2, 1, 1, 0,
-0, 1, 1, 1, 1, 1, 0,
-0, 2, 1, 1, 1, 2, 0,
-1, 1, 1, 1, 1, 1, 1,
-0, 0, 2, 1, 2, 0, 0,
-0, 0, 0, 1, 0, 0, 0,
-};
-int bullet_lookup[3][3] = {
-{0, PIXEL24(0x0, 0x0, 0xd0), PIXEL24(0x0, 0x0, 0x80)},
-{0, PIXEL24(0xd0, 0x0, 0x0), PIXEL24(0x80, 0x0, 0x0)},
-{0, PIXEL24(0xd0, 0xd0, 0x0), PIXEL24(0x80, 0x80, 0x0)}
-};
-
-
-
-
-void *memset(void *str, int c, size_t n)
-{
-	for(int i=0; i<n; ++i) *((unsigned char*)str+i) = (unsigned char)c;
-	return str;
-}
-
-bullet_entity create_bullet(int spawnx, int spawny, int col)
-{
-	bullet_entity bullet;
-	bullet.e.x = spawnx; bullet.e.y = spawny;
-	bullet.x = spawnx<<RES; bullet.y = spawny<<RES;
-	bullet.e.sprite = bullet_sprite;
-	bullet.e.off_x = BUL_R; bullet.e.off_y = BUL_R;
-	bullet.e.sx = 2*BUL_R+1; bullet.e.sy = 2*BUL_R+1;
-	bullet.e.lookup = bullet_lookup[col];
-	bullet.dx = bullet.dy = 0;
-	return bullet;
-}
 
 
 
@@ -190,7 +88,7 @@ void harmonic_advance(harmonic_oscillator *h) {
 }
 
 
-void main_loop()
+void original_loop()
 {
 	//hex_output(1);
 	clear_screen(global_col);
@@ -198,7 +96,7 @@ void main_loop()
 	clear_help_buffer();
 	hex_output(3);
 	entity reimu;
-	reimu.x = 100; reimu.y = 100;
+	reimu.x = BOARD_W/2; reimu.y = 100;
 	reimu.sprite = reimu_sprite;
 	reimu.off_x = 6; reimu.off_y = 12;
 	reimu.sx = 12; reimu.sy = 24;
@@ -258,7 +156,7 @@ void main_loop()
 		spawny = inity + (hy.x>>RES);
 		if(cnt<n_bul)
 		{
-			bullet[cnt] = create_bullet(spawnx, spawny, rem(div(bullet_col++, 10), 3));
+			bullet[cnt] = create_star(spawnx, spawny, rem(div(bullet_col++, 10), 3));
 			bullet[cnt].dx = speed_get_dx(&s); bullet[cnt].dy = speed_get_dy(&s);
 			//bullet[cnt].x += 7*bullet[cnt].dx; bullet[cnt].y += 7*bullet[cnt].dy;
 			speed_pool_advance(&s);
@@ -285,7 +183,7 @@ void main_loop()
 		move_entity(&marisa, mdx, mdy);
 		move_entity(&reimu, rdx, rdy);
 		for(int i=0; i<cnt; ++i) if(!update_bullet(bullet+i)) {
-			bullet[i] = create_bullet(spawnx, spawny, rem(div(bullet_col++, 10), 3));
+			bullet[i] = create_star(spawnx, spawny, rem(div(bullet_col++, 10), 3));
 			
 			bullet[i].dx = speed_get_dx(&s); bullet[i].dy = speed_get_dy(&s);
 			//bullet[i].x += 7*bullet[i].dx; bullet[i].y += 7*bullet[i].dy;
@@ -305,4 +203,265 @@ void main_loop()
 	}
 	
 }
+
+typedef struct rand_pool {
+	int maxval;
+	int cfa, cfb;
+	int curval;
+} rand_pool;
+
+int get_rand(rand_pool *r)
+{
+	r->curval = rem(r->cfa*r->curval+r->cfb, r->maxval);
+	return r->curval;
+}
+
+
+
+typedef struct youmu_bullet_arm
+{
+	int sx, sy, ex, ey;
+	int offx, offy;
+	int speed, maxdif;
+} youmu_bullet_arm;
+
+
+int int_sqrt(int a)
+{
+	int x = 1;
+	for(int i=0; i<10; ++i) x = (x+div(a, x))/2;
+	return x;
+}
+
+
+int safe_div(int a, int b)
+{
+	return a>=0 ? div(a, b) : -div(-a, b);
+}
+
+
+youmu_bullet_arm create_bullet_arm(int sx, int sy, int len, int offlen, int dirx, int diry, int speed, int maxdif, int c)
+{
+	int rtx = int_sqrt(3*(1<<(2*RES-2)));
+	int rty = 1<<(RES-1);
+	while(c--)
+	{
+		int ndirx = (dirx*rtx-diry*rty)>>RES;
+		int ndiry = (dirx*rty+diry*rtx)>>RES;
+		dirx = ndirx; diry = ndiry;
+	}
+	youmu_bullet_arm arm;
+	arm.sx = sx;
+	arm.sy = sy;
+	arm.ex = sx+((dirx*len)>>RES);
+	arm.ey = sy+((diry*len)>>RES);
+	arm.offx = (diry*offlen)>>RES;
+	arm.offy = -((dirx*offlen)>>RES);
+	arm.speed = speed;
+	arm.maxdif = maxdif;
+	return arm;
+}
+
+
+bullet_entity create_youmu_bullet(youmu_bullet_arm *arm, int t, int side, rand_pool *r, int col)
+{
+	int rt = t+div(get_rand(r), div(r->maxval, arm->maxdif))-(arm->maxdif/2);
+	if(rt<(1<<(RES-3))) rt = (1<<(RES-3));
+	if(rt>(1<<RES)-(1<<(RES-3))) rt = (1<<RES)-(1<<(RES-3));
+	//hex_output(2);
+	int destx = arm->sx+(((arm->ex-arm->sx)*rt)>>RES);
+	int desty = arm->sy+(((arm->ey-arm->sy)*rt)>>RES);
+	int spawnx = arm->sx+(((arm->ex-arm->sx)*t)>>RES)+side*arm->offx;
+	int spawny = arm->sy+(((arm->ey-arm->sy)*t)>>RES)+side*arm->offy;
+	int dx = destx-spawnx;
+	int dy = desty-spawny;
+	//hex_output(3);
+	int norm = int_sqrt((dx>>RES)*(dx>>RES)+(dy>>RES)*(dy>>RES))<<RES;
+	if(norm<64)
+	{
+		dx = 0;
+		dy = -arm->speed;
+	}
+	else
+	{
+		dx = safe_div((dx*arm->speed), norm);
+		dy = safe_div((dy*arm->speed), norm);
+	}
+	return create_small(spawnx, spawny, dx, dy, col);
+}
+
+
+void *memcpy(void *str1, const void *str2, size_t n)
+{
+	for(int i=0; i<n; ++i) *((unsigned char*)str1+i) = *((unsigned char*)str2+i);
+	return str1;
+}
+
+
+
+
+
+
+void youmu_loop()
+{
+	clear_screen(global_col);
+	//hex_output(2);
+	clear_help_buffer();
+	
+	rand_pool r;
+	r.maxval = 7321;
+	r.cfa = 1133; r.cfb = 3430;
+	r.curval = 0;
+
+	youmu_bullet_arm arms[5];
+
+	 
+
+	int bullet_cnt = 0, maxn = 500;
+	int bull_per_arm = 80;
+
+	bullet_entity bullets[maxn];
+
+
+	entity reimu;
+	reimu.x = BOARD_W/2; reimu.y = 70;
+	reimu.sprite = reimu_sprite;
+	reimu.off_x = 6; reimu.off_y = 12;
+	reimu.sx = 12; reimu.sy = 24;
+	reimu.lookup = reimu_lookup;
+
+	
+
+	while(1)
+	{
+		clear_screen(global_col);
+		clear_help_buffer();
+		print_entity(&reimu, 1);
+		for(int i=0; i<5; ++i)
+		{
+			arms[i] = create_bullet_arm(
+				(BOARD_W/2)<<RES, 300<<RES,
+				160<<RES, 1<<RES,
+				-(1<<RES), 0,
+				20*(1<<(RES-3)), 3*(1<<(RES-3)), i+1);
+		}
+		int frame_count = 0;
+		bullet_cnt = 0;
+		int bull_per_frame = 5;
+		while(bull_per_frame*frame_count<bull_per_arm)
+		{
+			start_time_delta();
+			clear_help_buffer();
+		
+
+			if(bull_per_frame*bullet_cnt<bull_per_arm)
+			{
+				for(int i=0; i<5*bull_per_frame; ++i)
+				{
+					int side = div(get_rand(&r), div(r.maxval, 4));
+					if(side==0) side = -10;
+					else if(side==1)  side = -2;
+					else if(side==2) side = 2;
+					else if(side==3) side = 10;
+					if(div(get_rand(&r), div(r.maxval, 15))==0) side = 0;
+					bullets[bullet_cnt*5*bull_per_frame+i] = create_youmu_bullet(arms+rem(i, 5), div((bull_per_frame*bullet_cnt)<<(RES), bull_per_arm), side, &r, rem(i, 5));
+				}
+				//hex_output(7);
+				//print_entity(&bullets[bullet_cnt].e, 1);
+				bullet_cnt++;
+			}
+			//hex_output(9);
+			for(int i=0; i<5*bullet_cnt*bull_per_frame; ++i)
+			{
+				update_bullet(bullets+i);
+				
+			}
+
+
+			int rdx=0, rdy=0;
+			if(stick_up()) rdx=0, rdy=2;
+			if(stick_down()) rdx=0, rdy=-2;
+			if(stick_left()) rdx=-2, rdy=0;
+			if(stick_right()) rdx=2, rdy=0;	
+			move_entity(&reimu, rdx, rdy);
+			
+			
+			for(int i=0; i<5*bull_per_frame*bullet_cnt; ++i) if(collision(reimu.x, reimu.y, &bullets[i].e, 6))
+			{
+				hex_output(0x2136);
+				return;
+			}
+			++frame_count;
+			//hex_output(frame_count);
+			int t= time_delta();
+			hex_output(div(t, 50*1000));
+			while(time_delta()<CYCLES_PER_TICK);
+		}
+
+		while(frame_count<256)
+		{
+			start_time_delta();
+			clear_help_buffer();
+
+			int rdx=0, rdy=0;
+			if(stick_up()) rdx=0, rdy=2;
+			if(stick_down()) rdx=0, rdy=-2;
+			if(stick_left()) rdx=-2, rdy=0;
+			if(stick_right()) rdx=2, rdy=0;	
+		
+			if(frame_count>=60 && frame_count <=80)
+			{
+				rdx >>= 1;
+				rdy >>= 1;
+			}
+			move_entity(&reimu, rdx, rdy);
+			
+			if(frame_count==60)
+			{
+				for(int i=0; i<5*bull_per_frame*bullet_cnt; ++i)
+				{
+					bullets[i].dx >>= 1;
+					bullets[i].dy >>= 1;
+					bullets[i].e.lookup = small_lookup[5];
+				}
+			}
+			if(frame_count==80)
+			{
+				for(int i=0; i<5*bull_per_frame*bullet_cnt; ++i)
+				{
+					bullets[i].dx <<= 1;
+					bullets[i].dy <<= 1;
+					bullets[i].e.lookup = small_lookup[rem(i, 5)];
+				}
+			}
+			for(int i=0; i<5*bull_per_frame*bullet_cnt; ++i)
+			{
+				update_bullet(bullets+i);
+			}
+
+			
+			for(int i=0; i<5*bull_per_frame*bullet_cnt; ++i) if(collision(reimu.x, reimu.y, &bullets[i].e, 6))
+			{
+				hex_output(0x2137);
+				return;
+			}
+			++frame_count;
+			//hex_output(frame_count);
+			int t= time_delta();
+			hex_output(div(t, 50*1000));
+			while(time_delta()<CYCLES_PER_TICK);
+		}
+		
+		
+	}
+	
+}
+
+
+
+
+
+
+
+
 
