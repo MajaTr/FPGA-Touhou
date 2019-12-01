@@ -1,6 +1,9 @@
 #include "danmaku.h"
 #include "peripherals.h"
 #include "asmfunctions.h"
+#include "entities.h"
+
+
 int stick_up()
 {
 	return avalon_read(PIO_BUTTONS) & (1<<5);
@@ -19,10 +22,6 @@ int stick_right()
 }
 
 
-void write_pixel(int x, int y, int col) 
-{
-	vid_set_pixel(y, x, col);
-}
 
 
 #define CYCLES_PER_TICK 1200000
@@ -30,31 +29,6 @@ void wait_for_tick()
 {
 	unsigned int cur = div(get_time(), CYCLES_PER_TICK);
 	while(div(get_time(), CYCLES_PER_TICK)==cur);
-}
-
-void draw_square(int x, int y, int r, int col) 
-{
-	for(int i=x-r; i<=x+r; ++i)
-		for(int j=y-r; j<=y+r; ++j) 
-	{
-		if(/*(i-x)*(i-x)+(j-y)*(j-y)<=r*r*/1)
-		{
-			write_pixel(i, j, col);
-		}
-	} 
-}
-
-
-void draw_horizontal(int x, int y, int r, int col) 
-{
-	for(int i=0; i<BOARD_W; ++i)
-		for(int j=y-r; j<=y+r; ++j) 
-	{
-		if(/*(i-x)*(i-x)+(j-y)*(j-y)<=r*r*/1)
-		{
-			write_pixel(i, j, col);
-		}
-	} 
 }
 
 
@@ -124,110 +98,6 @@ int marisa_sprite[32*27] = {
 };
 int marisa_lookup[7] = {0, PIXEL_BLACK, PIXEL_WHITE, PIXEL24(0xff, 0xff, 0), PIXEL24(0x80, 0x40, 0), PIXEL_WHITE, PIXEL_RED};
 
-
-
-typedef struct entity
-{
-	int x, y;
-	int off_x, off_y;
-	int sx, sy;
-	int *lookup;
-	int *sprite;
-} entity;
-
-const int global_col = PIXEL24(32, 32, 32);
-
-
-void print_entity(entity *r, int transp) 
-{
-	r->lookup[0] = global_col;
-	for(int px=0; px<r->sx; ++px) for(int py=0; py<r->sy; ++py)
-	{
-		if(transp && r->sprite[py*r->sx+px]==0) continue;
-		write_pixel(r->x+px-r->off_x, r->y+py-r->off_y, r->lookup[r->sprite[py*r->sx+px]]);
-	}
-}
-
-
-
-__attribute__((optimize("-fno-tree-loop-optimize")))
-void move_entity1(entity *r, int dx, int dy)
-{	
-	r->lookup[0] = global_col;
-	
-	for(int px=0; px<r->sx; ++px) for(int py=0; py<r->sy; ++py)
-	{
-		if(px-dx<0 || px-dx>=r->sx || py-dy<0 || py-dy>=r->sy)
-		{
-			write_pixel(r->x+px-r->off_x, r->y+py-r->off_y, r->lookup[0]);
-		} 
-		else if(r->sprite[(py-dy)*r->sx+px-dx]==0) 
-		{
-			write_pixel(r->x+px-r->off_x, r->y+py-r->off_y, r->lookup[0]);
-		}
-	}
-}
-
-
-
-void move_entity2(entity *r, int dx, int dy)
-{	
-	r->lookup[0] = global_col;
-	
-	
-	r->x += dx;
-	r->y += dy;
-	
-	print_entity(r, 1);
-}
-
-int entity_off_board(entity *r, int dx, int dy)
-{
-	if(r->x+dx<r->off_x || r->x+dx+r->off_x>BOARD_W) return 1;
-	if(r->y+dy<r->off_y || r->y+dy+r->off_y>BOARD_H) return 1;
-	return 0;
-}
-
-
-void clear_entity(entity *r) 
-{
-	for(int px=0; px<r->sx; ++px) for(int py=0; py<r->sy; ++py)
-	{
-		write_pixel(r->x+px-r->off_x, r->y+py-r->off_y, global_col);
-	}
-}
-
-
-#define RES 8
-
-typedef struct bullet_entity
-{
-	entity e;
-	int x, y;
-	int dx, dy;
-	
-} bullet_entity;
-
-
-int update_bullet1(bullet_entity *b) 
-{
-	b->x += b->dx;
-	b->y += b->dy;
-	int ddx = (b->x>>RES)-b->e.x, ddy = (b->y>>RES)-b->e.y;
-	if(entity_off_board(&b->e, ddx, ddy))
-	{
-		clear_entity(&b->e);
-		return 0;
-	}
-	move_entity1(&b->e, ddx, ddy);
-	return 1;
-}
-
-void update_bullet2(bullet_entity *b) 
-{
-	int ddx = (b->x>>RES)-b->e.x, ddy = (b->y>>RES)-b->e.y;
-	move_entity2(&b->e, ddx, ddy);
-}
 
 #define BUL_R 3
 

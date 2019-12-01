@@ -65,3 +65,39 @@ unsigned int get_ms()
 	return div(get_time(), 50*1000);
 }
 
+
+unsigned int help_buffer[(DISPLAY_WIDTH*DISPLAY_HEIGHT)>>4] = {};
+
+
+void vid_set_conditional(int x, int y, int colour, int cond, unsigned int new_help_val)
+{
+
+	// make sure we don't go past the edge of the screen
+	if ((x<0) || (x>DISPLAY_WIDTH-1))
+		return;
+	if ((y<0) || (y>DISPLAY_HEIGHT-1))
+		return;
+
+	int i = x+y*DISPLAY_WIDTH;
+	unsigned int tmp = help_buffer[i>>4];
+	unsigned int val = tmp>>((i&15)<<1);
+	
+	if(val==1) return;
+	if(val==2) cond = 1;
+	if(!cond) return;
+
+	tmp ^= (new_help_val^val)<<((i&15)<<1);
+	help_buffer[i>>4] = tmp;
+
+	// derive a pointer to the framebuffer described as 16 bit integers
+	volatile short *framebuffer = (volatile short *) (FRAMEBUFFER_BASE);
+	
+	framebuffer[i] = colour;
+}
+
+void clear_help_buffer()
+{
+	for(int i=0; i<(DISPLAY_WIDTH*DISPLAY_HEIGHT)>>4; ++i) help_buffer[i] = 0;
+}
+
+
